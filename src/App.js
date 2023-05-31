@@ -1,23 +1,47 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import "./App.css";
+import client from "./config";
 
 function App() {
+  const [settingValue, setSettingValue] = useState(null);
+  const [settingColor, setSettingColor] = useState("blue");
+
+  const fetchConfiguration = async () => {
+    try {
+      const setting = await client.getConfigurationSetting({
+        key: "testing",
+      });
+      setSettingValue(setting.value);
+    } catch (error) {
+      console.error("Error fetching configuration:", error);
+    }
+
+    try {
+      const setting = await client.getConfigurationSetting({
+        key: "color",
+      });
+      setSettingColor(setting.value);
+    } catch (error) {
+      console.error("Error fetching configuration:", error);
+    }
+    
+  };
+
+  // useEffect(() => {
+  //   fetchConfiguration();
+  // }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
+    <div>
+      <h2 style={{ color: settingColor }}>Azure App Configuration Demo</h2>
+      {settingValue ? (
         <p>
-          Edit <code>src/App.js</code> and save to reload.
+          Setting value: {settingValue}
         </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      ) : (
+        <p>Loading setting value...</p>
+      )}
+      <button onClick={fetchConfiguration}>Fetch Configuration</button>
     </div>
   );
 }
