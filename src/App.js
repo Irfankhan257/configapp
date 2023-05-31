@@ -41,6 +41,7 @@ function App() {
       ) : (
         <p>Loading setting value...</p>
       )}
+      <h3 style={{ color: settingColor }}>Lets see if this works</h3>
       <button onClick={fetchConfiguration}>Fetch Configuration</button>
     </div>
   );
